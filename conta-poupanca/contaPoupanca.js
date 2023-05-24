@@ -1,11 +1,11 @@
 class contaPoupanca{
-    constructor(numero,cpf,aniversario,saldo,ativo,poupanca){
+    constructor(numero,cpf,aniversario,diaAtual,saldo,ativo){
         this.numero = numero;
         this.cpf = cpf;
         this.aniversario = aniversario;
+        this.diaAtual = diaAtual;
         this.saldo = saldo;
-        this.ativo = ativo;
-        this.poupanca = poupanca
+        this.ativo = ativo
     }
     ativar(){
         this.ativo = true;
@@ -48,10 +48,11 @@ class contaPoupanca{
         }
     }
 
-    diaAniversarioPoupanca(){
+    diaAniversarioPoupanca(nBonus){
         if(this.ativo){
-            if(this.aniversario==diaAtual){
-                console.log("Bonus de " +this.saldo+(0.05*this.saldo) +" disponibilizado.")
+            if(this.aniversario===this.diaAtual && nBonus===0){
+                this.saldo =  this.saldo+(0.05*this.saldo)
+                nBonus+=1
             }
             else{
                 console.log("Nenhum bonus disponível.")
@@ -66,8 +67,10 @@ class contaPoupanca{
 const leia = require("prompt-sync")()
 let numero = parseInt(leia("digite o numero da conta: "))
 let cpf = parseInt (leia("digite o cpf da conta: "))
-let aniversario = parseInt(leia("insira sua data de aniversario: "))
-let diaAtual = parseInt(leia("insira a data atual: "))
+let aniversario = ""
+aniversario = (leia("insira sua data de aniversario: "))
+let diaAtual = ""
+let nBonus = 0
 let c1 = new contaPoupanca(numero,cpf,aniversario,diaAtual,0,false)
 let op=""
 let valor = 0
@@ -75,6 +78,7 @@ c1.ativar()
 for(let x=1; x<=10; x++){
     console.log("movimento: "+x)
     console.log("saldo atual conta: "+c1.saldo)
+    diaAtual = (leia("insira a data atual: "))
     op=leia("digite D para debito, C para credito: ")
     if(op=="D"){
         valor=parseInt (leia("digite o valor para debito: "))
@@ -85,8 +89,8 @@ for(let x=1; x<=10; x++){
         c1.credito(valor)
     }
 
-    if(.saldo>0){
-    c1.diaAniversarioPoupanca()
+    if(c1.saldo>0){
+    c1.diaAniversarioPoupanca(nBonus)
     }
 }
 console.log("saldo final da conta: "+c1.saldo)
